@@ -3,6 +3,8 @@
 ## 简介
 
 github release、archive以及项目文件的加速项目，支持clone，有Cloudflare Workers无服务器版本以及Python版本
+本项目在网页前端基础上修改了UI，偏向现代化，UI对于手机端的支持度不是特别好，建议使用电脑端访问
+按钮使用了MD3的元素，弹出框类似于MD3的圆角，这是我个人的审美，希望喜欢
 
 ## 演示
 
