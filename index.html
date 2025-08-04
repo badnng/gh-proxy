@@ -8,6 +8,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <style>
+        :root {
+            --md3-primary: #6750A4;
+            --md3-on-primary: #ffffff;
+            --md3-surface: #fef7ff;
+            --md3-on-surface: #1c1b1f;
+            --md3-radius: 16px;
+        }
         * {
             box-sizing: border-box;
         }
@@ -85,6 +92,11 @@
             display: block;
             margin-left: auto;
             margin-right: 0;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal button.close-btn:hover {
+            background-color: #4F378B;
         }
 
         .open-modal-btn {
@@ -96,6 +108,10 @@
             border: none;
             cursor: pointer;
             font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+        .open-modal-btn:hover {
+            background-color: #4F378B;
         }
 
         h1 {
@@ -165,6 +181,67 @@
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
 
+        .md3-bottom-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 24px;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
+            padding: 10px 24px;
+            display: flex;
+            gap: 16px;
+            z-index: 9999;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .md3-bottom-container .md3-btn {
+            background-color: #6750A4;
+            color: var(--md3-on-surface);
+            border: none;
+            padding: 8px 12px;
+            font-size: 14px;
+            border-radius: var(--md3-radius);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            color: #ffffff;
+        }
+
+        .md3-bottom-container .md3-btn:hover {
+            background-color: #4F378B; 
+        }
+
+        .md3-btn.active {
+            background-color: #6750A4;
+            color: #ffffff;
+        }
+        .md3-btn.active:hover {
+            background-color: #8d8d8d41; 
+            color: #4F378B;
+        }
+
+        /* 只针对 blurToggleBtn 按钮 */
+        #blurToggleBtn {
+            background-color: transparent !important;
+            color: #6750A4 !important;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        #blurToggleBtn:hover {
+            background-color: #6161618f !important;
+            color: #4F378B !important;
+        }
+
+        #blurToggleBtn.active {
+            background-color: #6750A4 !important;
+            color: #fff !important;
+            border: none;
+        }
+        #blurToggleBtn.active:hover {
+            background-color: #4F378B !important;
+            color: #fff !important;
+        }
     </style>
 </head>
 
@@ -220,31 +297,84 @@
     <div class="footer">项目基于Cloudflare Workers，开源于GitHub <a href="https://github.com/hunshcn/gh-proxy">hunshcn/gh-proxy</a></div>
 </div>
 
+<footer id="md3-bottom-container" class="md3-bottom-container">
+  <p>如电脑性能较低，建议点击右方按钮关闭模糊效果</p>
+  <button id="blurToggleBtn" class="md3-btn active" onclick="toggleBlur()" >关闭模糊</button>
+</footer> <!-- 关闭模糊按钮 -->
+
 <script>
     function toSubmit(e) {
         e.preventDefault();
         window.open(location.href.substr(0, location.href.lastIndexOf('/') + 1) + document.getElementsByName('q')[0].value);
         return false;
     }
+
+    // 关于二级页面UI的JS
     function openModal() {
         document.getElementById('infoModal').style.display = 'block';
         document.getElementById('modalOverlay').style.display = 'block';
+        document.getElementById('md3-bottom-container').style.display = 'none';
     }
 
     function closeModal() {
         document.getElementById('infoModal').style.display = 'none';
         document.getElementById('modalOverlay').style.display = 'none';
+        document.getElementById('md3-bottom-container').style.display = '';
     }
 
     function ForkMeOn() {
         document.getElementById('ForkMeUI').style.display = 'block';
         document.getElementById('modalOverlay').style.display = 'block';
+        document.getElementById('md3-bottom-container').style.display = 'none';
     }
     function ForkMeOff() {
         document.getElementById('ForkMeUI').style.display = 'none';
         document.getElementById('modalOverlay').style.display = 'none';
+        document.getElementById('md3-bottom-container').style.display = '';
     }
-</script>
 
+    let isBlurred = true; // 默认开启模糊
+
+function setBlurState(blur) {
+    const container = document.getElementById('container');
+    const md3BottomContainer = document.getElementById('md3-bottom-container');
+    const blurToggleBtn = document.getElementById('blurToggleBtn');
+    const modalblur = document.getElementById('modalOverlay');
+    const modal = document.getElementById('infoModal');
+    const ForkMeUI = document.getElementById('ForkMeUI');
+
+    isBlurred = blur;
+    localStorage.setItem('isBlurred', blur);
+
+    if (blur) {
+        container.style.backdropFilter = 'blur(20px)';
+        md3BottomContainer.style.backdropFilter = 'blur(12px)';
+        modalblur.style.backdropFilter = 'blur(20px)';
+        modal.style.background = 'rgba(255, 255, 255, 0.6)';
+        ForkMeUI.style.backdropFilter = 'blur(20px)';
+        ForkMeUI.style.background = 'rgba(255, 255, 255, 0.6)';
+        blurToggleBtn.textContent = '关闭模糊';
+        blurToggleBtn.classList.add('active');
+    } else {
+        container.style.backdropFilter = 'none';
+        md3BottomContainer.style.backdropFilter = 'none';
+        modalblur.style.backdropFilter = 'none';
+        modal.style.background = 'rgba(255, 255, 255, 1)';
+        ForkMeUI.style.backdropFilter = 'none';
+        ForkMeUI.style.background = 'rgba(255, 255, 255, 1)';
+        blurToggleBtn.textContent = '开启模糊';
+        blurToggleBtn.classList.remove('active');
+    }
+}
+
+window.onload = function() {
+    const savedBlur = localStorage.getItem('isBlurred'); 
+    setBlurState(savedBlur !== 'false'); // 默认true
+};
+
+function toggleBlur() {
+    setBlurState(!isBlurred);
+}
+</script>
 </body>
 </html>
