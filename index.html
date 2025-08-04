@@ -80,7 +80,12 @@
             margin-bottom: 0;
             color: #333;
         }
+        
+        .example-p {
+            margin-top: 0;
+        }
 
+        
         .modal button.close-btn {
             margin-top: 10px;
             background-color: #6750A4;
@@ -242,6 +247,89 @@
             background-color: #4F378B !important;
             color: #fff !important;
         }
+
+        @media (max-width: 600px) {
+    .container {
+        width: 98vw;
+        max-width: 98vw;
+        padding: 16px;
+        padding-bottom: 16px;
+        border-radius: 16px;
+        top: 0;
+        left: 0;
+        transform: none;
+        position: static;
+        box-shadow: 0 4px 16px rgba(43, 42, 42, 0.2);
+    }
+    h1 {
+        font-size: 1.2em;
+    }
+    .footer {
+        font-size: 12px;
+        padding: 8px 0;
+        position: static;
+    }
+    .md3-bottom-container {
+        flex-direction: column;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 16px;
+        font-size: 14px;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 8px;
+        width: 95vw;
+        max-width: 95vw;
+    }
+    .md3-bottom-container .md3-btn {
+        font-size: 15px;
+        padding: 10px 0;
+        width: 100%;
+        border-radius: 12px;
+    }
+    .open-modal-btn, .btn {
+        font-size: 15px;
+        padding: 10px 0;
+        width: 100%;
+        border-radius: 12px;
+    }
+    .url {
+        font-size: 15px;
+        padding: 12px;
+    }
+    .modal {
+        max-width: 98vw;
+        padding: 1em 0.5em;
+        font-size: 15px;
+    }
+    .modal {
+        position: fixed;
+        width: 96vw;
+        max-width: 96vw;
+        min-width: 0;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        padding: 1em 0.5em 70px 0.5em; /* 底部留空间给按钮 */
+        border-radius: 12px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-sizing: border-box;
+    }
+    .modal .close-btn {
+        position: absolute;
+        right: 20px;
+        bottom: 20px;
+        width: auto;
+        z-index: 2;
+        margin: 0;
+    }
+
+    .example-p {
+        margin-top: 0;
+    }
+}
+
     </style>
 </head>
 
@@ -268,7 +356,7 @@
 <div class="modal" id="infoModal">
     <div class="example">
         <h2>说明弹窗</h2>
-        <p style="line-height: 0;">release、archive使用cf加速，文件会跳转至JsDelivr</p>
+        <p class="example-p">release、archive使用cf加速，文件会跳转至JsDelivr</p>
         <p style="line-height: 1;">注意，不支持项目文件夹!</p>
         <p><strong>合法输入示例：</strong></p>
     <ul>
@@ -278,7 +366,9 @@
         <li>分支文件 https://github.com/hunshcn/project/blob/master/filename</li>
     </ul>
     </div>
-    <button class="close-btn" onclick="closeModal()">关闭</button>
+    <div>
+        <button class="close-btn" onclick="closeModal()">关闭</button>
+    </div>
 </div>
 
 <body class="flex">
@@ -298,7 +388,7 @@
 </div>
 
 <footer id="md3-bottom-container" class="md3-bottom-container">
-  <p>如电脑性能较低，建议点击右方按钮关闭模糊效果</p>
+  <p>如电脑性能较低，建议点击按钮关闭模糊效果</p>
   <button id="blurToggleBtn" class="md3-btn active" onclick="toggleBlur()" >关闭模糊</button>
 </footer> <!-- 关闭模糊按钮 -->
 
